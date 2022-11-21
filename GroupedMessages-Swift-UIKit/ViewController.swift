@@ -10,6 +10,7 @@ import WebKit
 
 class ViewController: UITableViewController {
     var indexCounter = 0 // for adding new messages to table
+    var timerCounter = 0
     let cellId = "id"
     var contentHeights =  [CGFloat](repeating: 0.0, count: Data.chatMessages.count)
     
@@ -22,7 +23,9 @@ class ViewController: UITableViewController {
         tableView.register(ChatMessageCell.self, forCellReuseIdentifier: ChatMessageCell.identifier)
         
         tableView.separatorStyle = .none
-        tableView.backgroundColor = UIColor(red: 1.00, green: 0.97, blue: 0.92, alpha: 1.00)
+       // tableView.backgroundColor = UIColor(red: 1.00, green: 0.97, blue: 0.92, alpha: 1.00)
+        
+        tableView.backgroundColor = UIColor(red: 0.64, green: 0.78, blue: 0.84, alpha: 0.90)
         
         addNewMessageToChat()
     }
@@ -90,7 +93,7 @@ class ViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        contentHeights[indexPath.row]
+        contentHeights[indexPath.row] + 10
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -119,13 +122,27 @@ extension ViewController: WKNavigationDelegate {
             return
         }
         
-        contentHeights[webView.tag] = webView.scrollView.contentSize.height
-        
-        let indexPath = IndexPath(row: webView.tag, section: 0)
-        DispatchQueue.main.async { [weak self] in
-            self?.tableView.reloadRows(at: [indexPath], with: .automatic)
-            self?.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        if webView.isLoading == false  {
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+                self.timerCounter += 1
+                if self.contentHeights[webView.tag] < webView.scrollView.contentSize.height {
+                    self.contentHeights[webView.tag] = webView.scrollView.contentSize.height
+                    
+                    let indexPath = IndexPath(row: webView.tag, section: 0)
+                    DispatchQueue.main.async { [weak self] in
+                        self?.tableView.reloadRows(at: [indexPath], with: .automatic)
+                        self?.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+                    }
+                }
+                
+                if self.timerCounter > 15 {
+                    print("ayva bitti")
+                    timer.invalidate()
+                }
+            }
         }
+        
+        
     }
 }
 

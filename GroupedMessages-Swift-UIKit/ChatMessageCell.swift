@@ -77,8 +77,6 @@ class ChatMessageCell: UITableViewCell {
         NSLayoutConstraint.activate(bubbleBackgroundViewContraints)
         NSLayoutConstraint.activate(webViewContraints)
         
-        
-        
         bubbleBackgroundViewLeadingConstraint = bubbleBackgroundView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32)
         
         bubbleBackgroundViewTrailingConstraint = bubbleBackgroundView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32)
