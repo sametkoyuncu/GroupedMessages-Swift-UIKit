@@ -93,7 +93,7 @@ class ViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        contentHeights[indexPath.row] + 10
+        contentHeights[indexPath.row] + 16
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -136,13 +136,10 @@ extension ViewController: WKNavigationDelegate {
                 }
                 
                 if self.timerCounter > 15 {
-                    print("ayva bitti")
                     timer.invalidate()
                 }
             }
         }
-        
-        
     }
 }
 
