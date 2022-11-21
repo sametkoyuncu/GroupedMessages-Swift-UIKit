@@ -32,7 +32,7 @@ struct Data {
                           previewing layouts and visual mockups.
                       </p>
                       <p>
-                          <iframe width='100%' height='135' src='https://www.youtube.com/embed/QbVrvCACg-o' title='YouTube video player'
+                          <iframe width='100%' height='140' src='https://www.youtube.com/embed/QbVrvCACg-o' title='YouTube video player'
                               frameborder='0'
                               allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
                               allowfullscreen></iframe>
@@ -66,7 +66,7 @@ struct Data {
                               previewing layouts and visual mockups.
                           </p>
              <div>
-                                     <img src="https://developer.apple.com/swift/images/swift-og.png" width="100%" height="135" alt="Flowers in Chania">
+                                     <img src="https://developer.apple.com/swift/images/swift-og.png" width="100%" height="150" alt="Flowers in Chania">
                                    </div>
              </div>
                         
@@ -74,7 +74,7 @@ struct Data {
                 .init(text: """
 <meta name='viewport' content='initial-scale=1.0' />
      <div>
-         <iframe width="100%" height="135" src="https://www.youtube.com/embed/mr6gjd73px4" title="YouTube video player"
+         <iframe width="100%" height="150" src="https://www.youtube.com/embed/mr6gjd73px4" title="YouTube video player"
              frameborder="0"
              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
              allowfullscreen></iframe>

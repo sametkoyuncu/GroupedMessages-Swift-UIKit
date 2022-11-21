@@ -9,7 +9,7 @@ import UIKit
 import WebKit
 
 class ViewController: UITableViewController {
-    var counter = 0
+    var indexCounter = 0 // for adding new messages to table
     let cellId = "id"
     var contentHeights =  [CGFloat](repeating: 0.0, count: Data.chatMessages.count)
     
@@ -22,7 +22,7 @@ class ViewController: UITableViewController {
         tableView.register(ChatMessageCell.self, forCellReuseIdentifier: ChatMessageCell.identifier)
         
         tableView.separatorStyle = .none
-        tableView.backgroundColor = UIColor(white: 0.95, alpha: 1)
+        tableView.backgroundColor = UIColor(red: 1.00, green: 0.97, blue: 0.92, alpha: 1.00)
         
         addNewMessageToChat()
     }
@@ -102,9 +102,10 @@ class ViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: ChatMessageCell.identifier, for: indexPath) as! ChatMessageCell
         let chatMessage = Data.chatMessages[indexPath.row]
 
-        cell.messageLabel.tag = indexPath.row
-        cell.messageLabel.navigationDelegate = self
-        cell.messageLabel.frame = CGRect(x: 0, y: 0, width: 250, height: contentHeights[indexPath.row])
+        cell.webView.tag = indexPath.row
+        cell.webView.navigationDelegate = self
+        
+        cell.webView.frame = CGRect(x: 0, y: 0, width: 250, height: contentHeights[indexPath.row])
         
         cell.chatMessage = chatMessage
         return cell
@@ -119,8 +120,12 @@ extension ViewController: WKNavigationDelegate {
         }
         
         contentHeights[webView.tag] = webView.scrollView.contentSize.height
-        tableView.reloadRows(at: [IndexPath(row: webView.tag, section: 0)], with: .automatic)
-        tableView.scrollToRow(at: IndexPath(row: webView.tag, section: 0), at: .bottom, animated: true)
+        
+        let indexPath = IndexPath(row: webView.tag, section: 0)
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadRows(at: [indexPath], with: .automatic)
+            self?.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        }
     }
 }
 
@@ -128,19 +133,16 @@ extension ViewController {
     func addNewMessageToChat() {
         Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { timer in
             self.contentHeights.append(0.0)
-            Data.chatMessages.append(Data.chatMessages2[self.counter])
+            Data.chatMessages.append(Data.chatMessages2[self.indexCounter])
             
-            DispatchQueue.main.async {
-                print("medet")
-                self.tableView.reloadData()
-                print("medet \(Data.chatMessages.count)")
-                let indexPath = IndexPath(row: Data.chatMessages.count - 1, section: 0)
-                
-            }
+            let selectedIndexPath = IndexPath(row: Data.chatMessages.count - 1, section: 0)
+
+            self.tableView.beginUpdates()
+            self.tableView.insertRows(at: [selectedIndexPath], with: .automatic)
+            self.tableView.endUpdates()
            
-            self.counter += 1
-            if self.counter == Data.chatMessages2.count {
-                print("ayva bitti")
+            self.indexCounter += 1
+            if self.indexCounter == Data.chatMessages2.count {
                 timer.invalidate()
             }
         }
