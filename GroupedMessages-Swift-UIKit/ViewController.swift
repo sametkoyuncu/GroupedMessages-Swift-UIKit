@@ -93,7 +93,7 @@ class ViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        contentHeights[indexPath.row] + 16
+        contentHeights[indexPath.row]
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -125,13 +125,17 @@ extension ViewController: WKNavigationDelegate {
         if webView.isLoading == false  {
             Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
                 self.timerCounter += 1
-                if self.contentHeights[webView.tag] < webView.scrollView.contentSize.height {
-                    self.contentHeights[webView.tag] = webView.scrollView.contentSize.height
+                let totalContraintsHeight: CGFloat = 20
+                // 20 = bubbleView ve web view'ın top ile bottom constraintleri toplamı
+                // vermezsek, row height'ı webView height'a eşitlediğimiz için
+                // contraint'leri ekleyince içeriği kırpıyor
+                if self.contentHeights[webView.tag] < webView.scrollView.contentSize.height + totalContraintsHeight {
+                    self.contentHeights[webView.tag] = webView.scrollView.contentSize.height + totalContraintsHeight
                     
                     let indexPath = IndexPath(row: webView.tag, section: 0)
                     DispatchQueue.main.async { [weak self] in
                         self?.tableView.reloadRows(at: [indexPath], with: .automatic)
-                        self?.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+                        self?.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
                     }
                 }
                 
@@ -145,7 +149,7 @@ extension ViewController: WKNavigationDelegate {
 
 extension ViewController {
     func addNewMessageToChat() {
-        Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { timer in
+        Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { timer in
             self.contentHeights.append(0.0)
             Data.chatMessages.append(Data.chatMessages2[self.indexCounter])
             

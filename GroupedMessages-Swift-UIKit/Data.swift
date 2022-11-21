@@ -58,6 +58,15 @@ struct Data {
                   isIncoming: true, date: Date.dateFrom(customString: "13 Kas 2022")),
     ]
     static let chatMessages2: [ChatMessage] = [
+        .init(text: """
+              <meta name='viewport' content='initial-scale=1.0' />
+                  <div style="color: white">
+                      <p>
+                          <b>Lorem ipsum</b> is placeholder <i>commonly used</i> in the graphic..
+                      </p>
+         </div>
+                    
+         """, isIncoming: false, date: Date.dateFrom(customString: "14 Kas 2022")),
             .init(text: """
                   <meta name='viewport' content='initial-scale=1.0' />
                       <div style="color: white">

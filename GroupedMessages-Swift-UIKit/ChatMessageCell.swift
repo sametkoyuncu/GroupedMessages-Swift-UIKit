@@ -63,13 +63,13 @@ class ChatMessageCell: UITableViewCell {
         
         let bubbleBackgroundViewContraints = [
             bubbleBackgroundView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            bubbleBackgroundView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4),
+            bubbleBackgroundView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
             bubbleBackgroundView.widthAnchor.constraint(lessThanOrEqualToConstant: 280),
         ]
         
         let webViewContraints = [
             webView.topAnchor.constraint(equalTo:  bubbleBackgroundView.topAnchor, constant: 4),
-            webView.bottomAnchor.constraint(equalTo: bubbleBackgroundView.bottomAnchor, constant: -10),
+            webView.bottomAnchor.constraint(equalTo: bubbleBackgroundView.bottomAnchor, constant: -4),
             webView.leadingAnchor.constraint(equalTo: bubbleBackgroundView.leadingAnchor, constant: 4),
             webView.trailingAnchor.constraint(equalTo: bubbleBackgroundView.trailingAnchor, constant: -4)
         ]
