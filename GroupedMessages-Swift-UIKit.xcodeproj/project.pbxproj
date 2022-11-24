@@ -60,17 +60,25 @@
 		F11C019C2928E679003A830D /* GroupedMessages-Swift-UIKit */ = {
 			isa = PBXGroup;
 			children = (
-				F11C019D2928E679003A830D /* AppDelegate.swift */,
-				F11C019F2928E679003A830D /* SceneDelegate.swift */,
+				F17F9A64292FF06700828F38 /* SupportingFiles */,
+				F11C01A32928E679003A830D /* Main.storyboard */,
 				F11C01A12928E679003A830D /* ViewController.swift */,
 				F10E1D0E2928F59B00FEA92E /* ChatMessageCell.swift */,
 				F10E1D1029293CA300FEA92E /* Data.swift */,
-				F11C01A32928E679003A830D /* Main.storyboard */,
+			);
+			path = "GroupedMessages-Swift-UIKit";
+			sourceTree = "<group>";
+		};
+		F17F9A64292FF06700828F38 /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				F11C019D2928E679003A830D /* AppDelegate.swift */,
+				F11C019F2928E679003A830D /* SceneDelegate.swift */,
 				F11C01A62928E679003A830D /* Assets.xcassets */,
 				F11C01A82928E679003A830D /* LaunchScreen.storyboard */,
 				F11C01AB2928E679003A830D /* Info.plist */,
 			);
-			path = "GroupedMessages-Swift-UIKit";
+			name = SupportingFiles;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
