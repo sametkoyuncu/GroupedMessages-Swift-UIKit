@@ -6,11 +6,14 @@
 //
 
 import UIKit
+import WebKit
 
 class ViewController: UITableViewController {
-    
+    var indexCounter = 0 // for adding new messages to table
+    var timerCounter = 0
     let cellId = "id"
-
+    var contentHeights =  [CGFloat](repeating: 0.0, count: Data.chatMessages.count)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -20,11 +23,11 @@ class ViewController: UITableViewController {
         tableView.register(ChatMessageCell.self, forCellReuseIdentifier: ChatMessageCell.identifier)
         
         tableView.separatorStyle = .none
-        tableView.backgroundColor = UIColor(white: 0.95, alpha: 1)
-    }
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        Data.chatMessages.count
+       // tableView.backgroundColor = UIColor(red: 1.00, green: 0.97, blue: 0.92, alpha: 1.00)
+        
+        tableView.backgroundColor = UIColor(red: 0.64, green: 0.78, blue: 0.84, alpha: 0.90)
+        
+        addNewMessageToChat()
     }
     
     class DateHeaderLabel: UILabel {
@@ -54,8 +57,12 @@ class ViewController: UITableViewController {
         }
     }
     
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        1
+    }
+    
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if let firstMessageInSection = Data.chatMessages[section].first {
+        if let firstMessageInSection = Data.chatMessages.first {
             // date label
             let dateLabel = DateHeaderLabel()
             
@@ -78,24 +85,84 @@ class ViewController: UITableViewController {
             
             return containerView
         }
-       return nil
+        return nil
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         50
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        Data.chatMessages[section].count
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        contentHeights[indexPath.row]
     }
-
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        Data.chatMessages.count
+    }
+    
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ChatMessageCell.identifier, for: indexPath) as! ChatMessageCell
-        let chatMessage = Data.chatMessages[indexPath.section][indexPath.row]
-        cell.messageLabel.numberOfLines = 0
+        let chatMessage = Data.chatMessages[indexPath.row]
+
+        cell.webView.tag = indexPath.row
+        cell.webView.navigationDelegate = self
+        
+        cell.webView.frame = CGRect(x: 0, y: 0, width: 250, height: contentHeights[indexPath.row])
         
         cell.chatMessage = chatMessage
         return cell
     }
 }
 
+extension ViewController: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        if (contentHeights[webView.tag] != 0.0)
+        {
+            return
+        }
+        
+        if webView.isLoading == false  {
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+                self.timerCounter += 1
+                let totalContraintsHeight: CGFloat = 20
+                // 20 = bubbleView ve web view'ın top ile bottom constraintleri toplamı
+                // vermezsek, row height'ı webView height'a eşitlediğimiz için
+                // contraint'leri ekleyince içeriği kırpıyor
+                if self.contentHeights[webView.tag] < webView.scrollView.contentSize.height + totalContraintsHeight {
+                    self.contentHeights[webView.tag] = webView.scrollView.contentSize.height + totalContraintsHeight
+                    
+                    let indexPath = IndexPath(row: webView.tag, section: 0)
+                    DispatchQueue.main.async { [weak self] in
+                        self?.tableView.reloadRows(at: [indexPath], with: .automatic)
+                        self?.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+                    }
+                }
+                
+                if self.timerCounter > 15 {
+                    timer.invalidate()
+                }
+            }
+        }
+    }
+}
+
+extension ViewController {
+    func addNewMessageToChat() {
+        Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { timer in
+            self.contentHeights.append(0.0)
+            Data.chatMessages.append(Data.chatMessages2[self.indexCounter])
+            
+            let selectedIndexPath = IndexPath(row: Data.chatMessages.count - 1, section: 0)
+
+            self.tableView.beginUpdates()
+            self.tableView.insertRows(at: [selectedIndexPath], with: .automatic)
+            self.tableView.endUpdates()
+           
+            self.indexCounter += 1
+            if self.indexCounter == Data.chatMessages2.count {
+                timer.invalidate()
+            }
+        }
+    }
+}

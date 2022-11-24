@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 55;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -63,12 +63,12 @@
 				F11C019D2928E679003A830D /* AppDelegate.swift */,
 				F11C019F2928E679003A830D /* SceneDelegate.swift */,
 				F11C01A12928E679003A830D /* ViewController.swift */,
+				F10E1D0E2928F59B00FEA92E /* ChatMessageCell.swift */,
+				F10E1D1029293CA300FEA92E /* Data.swift */,
 				F11C01A32928E679003A830D /* Main.storyboard */,
 				F11C01A62928E679003A830D /* Assets.xcassets */,
 				F11C01A82928E679003A830D /* LaunchScreen.storyboard */,
 				F11C01AB2928E679003A830D /* Info.plist */,
-				F10E1D0E2928F59B00FEA92E /* ChatMessageCell.swift */,
-				F10E1D1029293CA300FEA92E /* Data.swift */,
 			);
 			path = "GroupedMessages-Swift-UIKit";
 			sourceTree = "<group>";
@@ -109,7 +109,7 @@
 				};
 			};
 			buildConfigurationList = F11C01952928E679003A830D /* Build configuration list for PBXProject "GroupedMessages-Swift-UIKit" */;
-			compatibilityVersion = "Xcode 14.0";
+			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (

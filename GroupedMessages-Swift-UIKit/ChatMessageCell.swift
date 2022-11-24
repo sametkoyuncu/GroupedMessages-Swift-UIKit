@@ -6,44 +6,50 @@
 //
 
 import UIKit
+import WebKit
 
 class ChatMessageCell: UITableViewCell {
     static let identifier = "ChatMessageCellId"
     
-    let messageLabel = UILabel()
     let bubbleBackgroundView = UIView()
+    let webView = WKWebView()
     
-    var messageLabelLeadingConstraint: NSLayoutConstraint!
-    var messageLabelTrailingConstraint: NSLayoutConstraint!
+    var bubbleBackgroundViewLeadingConstraint: NSLayoutConstraint!
+    var bubbleBackgroundViewTrailingConstraint: NSLayoutConstraint!
     
     var chatMessage: ChatMessage! {
         didSet{
-            messageLabel.text = chatMessage.text
+            webView.loadHTMLString(chatMessage.text, baseURL: nil)
             
             // set colors
-            bubbleBackgroundView.backgroundColor = chatMessage.isIncoming ? .white : .darkGray
-            messageLabel.textColor = chatMessage.isIncoming ? .black : .white
+            bubbleBackgroundView.backgroundColor = chatMessage.isIncoming ? .white : .systemGreen
             
             // set constraints for messageLabel
             switch chatMessage.isIncoming {
             case true:
-                messageLabelLeadingConstraint.isActive = true
-                messageLabelTrailingConstraint.isActive = false
+                bubbleBackgroundViewLeadingConstraint.isActive = true
+                bubbleBackgroundViewTrailingConstraint.isActive = false
             case false:
-                messageLabelLeadingConstraint.isActive = false
-                messageLabelTrailingConstraint.isActive = true
+                bubbleBackgroundViewLeadingConstraint.isActive = false
+                bubbleBackgroundViewTrailingConstraint.isActive = true
             }
         }
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
         backgroundColor = .clear
-        addSubview(bubbleBackgroundView)
-        addSubview(messageLabel)
-        //messageLabel.backgroundColor = .red
+        
+        webView.isOpaque = false
+        webView.backgroundColor = .clear
+        webView.scrollView.backgroundColor = .clear
 
-        bubbleBackgroundView.layer.cornerRadius = 16
+        addSubview(bubbleBackgroundView)
+        bubbleBackgroundView.addSubview(webView)
+        
+        bubbleBackgroundView.layer.cornerRadius = 8
+
         configureConstraints()
     }
     
@@ -52,29 +58,28 @@ class ChatMessageCell: UITableViewCell {
     }
     
     func configureConstraints() {
-        messageLabel.translatesAutoresizingMaskIntoConstraints = false
+        webView.translatesAutoresizingMaskIntoConstraints = false
         bubbleBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         
-        let messageLabelContraints = [
-            messageLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16),
-            messageLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
-            messageLabel.widthAnchor.constraint(lessThanOrEqualToConstant: 250)
-        ]
-        
         let bubbleBackgroundViewContraints = [
-            bubbleBackgroundView.topAnchor.constraint(equalTo: messageLabel.topAnchor, constant: -8),
-            bubbleBackgroundView.bottomAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 8),
-            bubbleBackgroundView.leadingAnchor.constraint(equalTo: messageLabel.leadingAnchor, constant: -16),
-            bubbleBackgroundView.trailingAnchor.constraint(equalTo: messageLabel.trailingAnchor, constant: 16),
+            bubbleBackgroundView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            bubbleBackgroundView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+            bubbleBackgroundView.widthAnchor.constraint(lessThanOrEqualToConstant: 280),
         ]
         
-        NSLayoutConstraint.activate(messageLabelContraints)
+        let webViewContraints = [
+            webView.topAnchor.constraint(equalTo:  bubbleBackgroundView.topAnchor, constant: 4),
+            webView.bottomAnchor.constraint(equalTo: bubbleBackgroundView.bottomAnchor, constant: -4),
+            webView.leadingAnchor.constraint(equalTo: bubbleBackgroundView.leadingAnchor, constant: 4),
+            webView.trailingAnchor.constraint(equalTo: bubbleBackgroundView.trailingAnchor, constant: -4)
+        ]
+        
         NSLayoutConstraint.activate(bubbleBackgroundViewContraints)
+        NSLayoutConstraint.activate(webViewContraints)
         
+        bubbleBackgroundViewLeadingConstraint = bubbleBackgroundView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32)
         
-        messageLabelLeadingConstraint = messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 32)
-        
-        messageLabelTrailingConstraint = messageLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32)
+        bubbleBackgroundViewTrailingConstraint = bubbleBackgroundView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -32)
     
     }
 }
